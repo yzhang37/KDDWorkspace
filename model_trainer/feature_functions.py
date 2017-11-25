@@ -145,15 +145,44 @@ def stringDistance_2(AuthorIdPaperId, feature_params):
     算法思想：因为一篇论文可能在多个期刊上发表过，因此通过一个 paperId 可以获得一个期刊id 的 List
     再根据当前的用户在哪些期刊上发表过论文，进行比较，统计数量
 '''
-def JournalInfo(AuthorIdPaperId, feature_params):
-    Paper=feature_params["AuthorIdPaperId"]
+def JournalInfo_1(AuthorIdPaperId, feature_params):
+    Paper=feature_params["Paper"]
+    dict_authorOnJournals=feature_params["dict_authorOnJournals"]
+
     authorId = AuthorIdPaperId.authorId
     paperId = AuthorIdPaperId.paperId
 
     # 得到 paperId 对应的期刊id Journal_Id
-    curr_journal_Id = list(map(str, list(Paper[Paper["Id"] == int(paperId)]["JournalId"].values)))
+    curr_journals = list(map(str, list(Paper[Paper["Id"] == int(paperId)]["JournalId"].values)))
 
-    return 0
+    # 得到 authorId 对应的期刊
+    author_journals = dict_authorOnJournals.get(authorId, {}).keys()
+
+    nums = len(set(curr_journals) & set(author_journals))
+
+    return util.get_feature_by_list([nums])
+
+
+def JournalInfo_2(AuthorIdPaperId, feature_params):
+    Paper=feature_params["Paper"]
+    dict_authorOnJournals=feature_params["dict_authorOnJournals"]
+
+    authorId = AuthorIdPaperId.authorId
+    paperId = AuthorIdPaperId.paperId
+
+    # 得到 paperId 对应的期刊id Journal_Id
+    curr_journals = list(map(str, list(Paper[Paper["Id"] == int(paperId)]["JournalId"].values)))
+
+    # 得到 authorId 对应的期刊
+    author_journals = dict_authorOnJournals.get(authorId, {})
+
+    score = 0
+
+    for journal in curr_journals:
+        if journal in author_journals:
+            score += author_journals[journal]
+
+    return util.get_feature_by_list([score])
 
 
 ''' 一些距离计算方法 '''

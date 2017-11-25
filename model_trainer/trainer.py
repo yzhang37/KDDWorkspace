@@ -63,7 +63,8 @@ def main():
         coauthor_2,
         stringDistance_1,
         stringDistance_2,
-        # JournalInfo
+        JournalInfo_1,
+        JournalInfo_2, # current of no use
     ]
 
     ''' 分类器 '''
@@ -92,11 +93,16 @@ def main():
     print("loading data...")
     train_AuthorIdPaperIds = load_train_data(config.TRAIN_FILE)  # 加载训练数据
     test_AuthorIdPaperIds = load_test_data(config.TEST_FILE)  # 加载测试数据
+
     # coauthor, 共作者数据
     dict_coauthor = json.load(open(config.COAUTHOR_FILE), encoding="utf-8")
+
     # (paperId, AuthorId) --> {"name": "name1##name2", "affiliation": "aff1##aff2"}
     dict_paperIdAuthorId_to_name_aff \
         = json.load(open(config.PAPERIDAUTHORID_TO_NAME_AND_AFFILIATION_FILE), encoding="utf-8")
+
+    dict_authorOnJournals = json.load(open(config.AUTHOR_ON_JOURNAL_FILE))
+
     # 使用pandas加载csv数据
     PaperAuthor = pandas.read_csv(config.PAPERAUTHOR_FILE)  # 加载 PaperAuthor.csv 数据
     Author = pandas.read_csv(config.AUTHOR_FILE) # 加载 Author.csv 数据
@@ -105,7 +111,8 @@ def main():
 
     feature_params = {"dict_coauthor": dict_coauthor,
                       "dict_paperIdAuthorId_to_name_aff": dict_paperIdAuthorId_to_name_aff, "PaperAuthor": PaperAuthor,
-                      "Author": Author, "Paper": Paper}
+                      "Author": Author, "Paper": Paper,
+                      "dict_authorOnJournals": dict_authorOnJournals}
 
     # 为训练和测试数据，抽取特征，分别生成特征文件
     trainer.make_feature_file(train_AuthorIdPaperIds,  #训练的 Author, Paper 数据
