@@ -8,7 +8,7 @@ if sys.version_info.major == 2:
 
 # 当前工作目录
 hostname = socket.gethostname()
-if hostname.lower().startswith("l-mbookpro"):
+if hostname.lower().startswith("l-mbookpro") or hostname.startswith("192.168."):
     CWD = "/Users/l/Projects/Python/KDD/KDD_Workspace"
 elif hostname.lower() == "precision":
     CWD = "/home/zhenghang/Projects/KDD"
