@@ -4,22 +4,14 @@ import util
 from example import Example
 
 
-def Make_feature_file(authorIdPaperIds, dict_coauthor, dict_paperIdAuthorId_to_name_aff, PaperAuthor, Author, Paper, feature_function_list, to_file):
+def Make_feature_file(authorIdPaperIds, feature_params, feature_function_list, to_file):
     example_list = []
     dimension = 0
 
     # process_bar = pyprind.ProgPercent(len(authorIdPaperIds))
     for authorIdPaperId in authorIdPaperIds:
         # process_bar.update()
-
-        features = [
-            feature_function(AuthorIdPaperId=authorIdPaperId,
-                             dict_coauthor=dict_coauthor,
-                             dict_paperIdAuthorId_to_name_aff=dict_paperIdAuthorId_to_name_aff,
-                             PaperAuthor=PaperAuthor,
-                             Author=Author,
-                             Paper=Paper)
-            for feature_function in feature_function_list]
+        features = [feature_function(authorIdPaperId, feature_params) for feature_function in feature_function_list]
         #合并特征
         feature = util.mergeFeatures(features)
         dimension = feature.dimension

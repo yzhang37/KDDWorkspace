@@ -17,7 +17,10 @@ import numpy as np
 
 
 # 1. 简单计算top 10 coauthor出现的个数
-def coauthor_1(AuthorIdPaperId, dict_coauthor, dict_paperIdAuthorId_to_name_aff, PaperAuthor, Author, Paper):
+def coauthor_1(AuthorIdPaperId, feature_params):
+    dict_coauthor = feature_params["dict_coauthor"]
+    PaperAuthor = feature_params["PaperAuthor"]
+
     authorId = AuthorIdPaperId.authorId
     paperId = AuthorIdPaperId.paperId
 
@@ -33,7 +36,10 @@ def coauthor_1(AuthorIdPaperId, dict_coauthor, dict_paperIdAuthorId_to_name_aff,
 
 
 # 2. 还可以算一个得分，每个出现pid论文的top 10 coauthor可以根据他们跟aid作者的合作次数算一个分数，然后累加，
-def coauthor_2(AuthorIdPaperId, dict_coauthor, dict_paperIdAuthorId_to_name_aff, PaperAuthor, Author, Paper):
+def coauthor_2(AuthorIdPaperId, feature_params):
+    PaperAuthor = feature_params["PaperAuthor"]
+    dict_coauthor = feature_params["dict_coauthor"]
+
     authorId = AuthorIdPaperId.authorId
     paperId = AuthorIdPaperId.paperId
 
@@ -52,7 +58,9 @@ def coauthor_2(AuthorIdPaperId, dict_coauthor, dict_paperIdAuthorId_to_name_aff,
 
 ''' String Distance Feature'''
 # 1. name-a 与name1##name2##name3的距离，同理affliction-a 和 aff1##aff2##aff3的距离
-def stringDistance_1(AuthorIdPaperId, dict_coauthor, dict_paperIdAuthorId_to_name_aff, PaperAuthor, Author, Paper):
+def stringDistance_1(AuthorIdPaperId, feature_params):
+    dict_paperIdAuthorId_to_name_aff=feature_params["dict_paperIdAuthorId_to_name_aff"]
+    Author=feature_params["Author"]
     authorId = AuthorIdPaperId.authorId
     paperId = AuthorIdPaperId.paperId
 
@@ -83,7 +91,10 @@ def stringDistance_1(AuthorIdPaperId, dict_coauthor, dict_paperIdAuthorId_to_nam
 
 
 # 2. name-a分别与name1，name2，name3的距离，然后取平均，同理affliction-a和,aff1，aff2，aff3的平均距离
-def stringDistance_2(AuthorIdPaperId, dict_coauthor, dict_paperIdAuthorId_to_name_aff, PaperAuthor, Author, Paper):
+def stringDistance_2(AuthorIdPaperId, feature_params):
+    dict_paperIdAuthorId_to_name_aff=feature_params["dict_paperIdAuthorId_to_name_aff"]
+    Author=feature_params["Author"]
+
     authorId = AuthorIdPaperId.authorId
     paperId = AuthorIdPaperId.paperId
 
@@ -134,7 +145,8 @@ def stringDistance_2(AuthorIdPaperId, dict_coauthor, dict_paperIdAuthorId_to_nam
     算法思想：因为一篇论文可能在多个期刊上发表过，因此通过一个 paperId 可以获得一个期刊id 的 List
     再根据当前的用户在哪些期刊上发表过论文，进行比较，统计数量
 '''
-def JournalInfo(AuthorIdPaperId, dict_coauthor, dict_paperIdAuthorId_to_name_aff, PaperAuthor, Author, Paper):
+def JournalInfo(AuthorIdPaperId, feature_params):
+    Paper=feature_params["AuthorIdPaperId"]
     authorId = AuthorIdPaperId.authorId
     paperId = AuthorIdPaperId.paperId
 

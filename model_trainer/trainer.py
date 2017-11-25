@@ -27,9 +27,7 @@ class Trainer(object):
         self.test_feature_path = test_feature_path
         self.test_result_path = test_result_path
 
-    def make_feature_file(self, train_AuthorIdPaperIds, test_AuthorIdPaperIds,
-                          dict_coauthor, dict_paperIdAuthorId_to_name_aff,
-                          PaperAuthor, Author, Paper):
+    def make_feature_file(self, train_AuthorIdPaperIds, test_AuthorIdPaperIds, feature_params={}):
         print("-"*120)
         print("\n".join([f.__name__ for f in self.feature_function_list]))
         print("-" * 120)
@@ -38,11 +36,7 @@ class Trainer(object):
 
         Make_feature_file(
             authorIdPaperIds=train_AuthorIdPaperIds,
-            dict_coauthor=dict_coauthor,
-            dict_paperIdAuthorId_to_name_aff=dict_paperIdAuthorId_to_name_aff,
-            PaperAuthor=PaperAuthor,
-            Author=Author,
-            Paper=Paper,
+            feature_params=feature_params,
             feature_function_list=self.feature_function_list,
             to_file=self.train_feature_path)
 
@@ -50,11 +44,7 @@ class Trainer(object):
 
         Make_feature_file(
             authorIdPaperIds=test_AuthorIdPaperIds,
-            dict_coauthor=dict_coauthor,
-            dict_paperIdAuthorId_to_name_aff=dict_paperIdAuthorId_to_name_aff,
-            PaperAuthor=PaperAuthor,
-            Author=Author,
-            Paper=Paper,
+            feature_params=feature_params,
             feature_function_list=self.feature_function_list,
             to_file=self.test_feature_path)
 
@@ -113,14 +103,14 @@ def main():
     Paper = pandas.read_csv(config.PAPER_FILE) # 记载 Paper.csv 的数据
     print("data is loaded...")
 
+    feature_params = {"dict_coauthor": dict_coauthor,
+                      "dict_paperIdAuthorId_to_name_aff": dict_paperIdAuthorId_to_name_aff, "PaperAuthor": PaperAuthor,
+                      "Author": Author, "Paper": Paper}
+
     # 为训练和测试数据，抽取特征，分别生成特征文件
     trainer.make_feature_file(train_AuthorIdPaperIds,  #训练的 Author, Paper 数据
                               test_AuthorIdPaperIds,   #测试的 Author, Paper 数据
-                              dict_coauthor,           #
-                              dict_paperIdAuthorId_to_name_aff,
-                              PaperAuthor,
-                              Author,
-                              Paper)
+                              feature_params)
     # 根据训练特征文件，训练模型
     trainer.train_mode()
     # 使用训练好的模型，对测试集进行预测
