@@ -1,0 +1,11 @@
+Desktop.ini
+.DS_Store
+
+# pycharm files
+.idea
+__pycache__/
+
+# data is too large for repository
+data
+feature
+model
