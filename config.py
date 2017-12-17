@@ -17,13 +17,21 @@ else:
 # CWD = "/home/username/KDD/KDD_benchmark" # Linux系统目录
 # CWD = "D:\KDD\KDD_Benchmark" # Windows系统目录
 
+__period = "train"
+# __period = "handle"
+
 DATA_PATH = os.path.join(CWD, "data")
 DATASET_PATH = os.path.join(DATA_PATH, "dataset")
 
 # 训练和测试文件（训练阶段有验证数据，测试阶段使用测试数据）
-TRAIN_FILE = os.path.join(DATASET_PATH, "train_set", "Train.csv")
-TEST_FILE = os.path.join(DATASET_PATH, "valid_set", "Valid.csv")
-GOLD_FILE = os.path.join(DATASET_PATH, "valid_set", "Valid.gold.csv")
+if __period == "train":
+    TRAIN_FILE = os.path.join(DATASET_PATH, "train_set", "Train.csv")
+    TEST_FILE = os.path.join(DATASET_PATH, "valid_set", "Valid.csv")
+    GOLD_FILE = os.path.join(DATASET_PATH, "valid_set", "Valid.gold.csv")
+else:
+    TRAIN_FILE = os.path.join(DATASET_PATH, "train_set", "Train.csv")
+    TEST_FILE = os.path.join(DATASET_PATH, "test_set", "Test.02.csv")
+    GOLD_FILE = ""
 
 # 模型文件
 MODEL_PATH = os.path.join(CWD, "model", "kdd.model")
@@ -42,3 +50,6 @@ AUTHOR_FILE = os.path.join(DATASET_PATH, "Author.csv")
 PAPER_FILE = os.path.join(DATASET_PATH, "Paper.csv")
 AUTHOR_ON_JOURNAL_FILE = os.path.join(DATASET_PATH, "authOnJournal.json")
 AUTHOR_ON_CONFERENCE_FILE = os.path.join(DATASET_PATH, "authOnConference.json")
+
+EXPORT_DIR = os.path.join(CWD, "export")
+EXPORT_TEST_CSV_PATH = os.path.join(EXPORT_DIR, "Test.P02.csv")

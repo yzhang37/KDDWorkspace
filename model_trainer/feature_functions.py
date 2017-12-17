@@ -185,6 +185,46 @@ def JournalInfo_2(AuthorIdPaperId, feature_params):
     return util.get_feature_by_list([score])
 
 
+def ConferenceInfo_1(AuthorIdPaperId, feature_params):
+    Paper=feature_params["Paper"]
+    dict_authorOnConferences=feature_params["dict_authorOnConferences"]
+
+    authorId = AuthorIdPaperId.authorId
+    paperId = AuthorIdPaperId.paperId
+
+    # 得到 paperId 对应的会议id cournal_Id
+    curr_conferences = list(map(str, list(Paper[Paper["Id"] == int(paperId)]["ConferenceId"].values)))
+
+    # 得到 authorId 对应的会议
+    author_conferences = dict_authorOnConferences.get(authorId, {}).keys()
+
+    nums = len(set(curr_conferences) & set(author_conferences))
+
+    return util.get_feature_by_list([nums])
+
+
+def ConferenceInfo_2(AuthorIdPaperId, feature_params):
+    Paper=feature_params["Paper"]
+    dict_authorOnConferences=feature_params["dict_authorOnConferences"]
+
+    authorId = AuthorIdPaperId.authorId
+    paperId = AuthorIdPaperId.paperId
+
+    # 得到 paperId 对应的会议id Journal_Id
+    curr_conferences = list(map(str, list(Paper[Paper["Id"] == int(paperId)]["ConferenceId"].values)))
+
+    # 得到 authorId 对应的会议
+    author_conferences = dict_authorOnConferences.get(authorId, {})
+
+    score = 0
+
+    for journal in curr_conferences:
+        if journal in author_conferences:
+            score += author_conferences[journal]
+
+    return util.get_feature_by_list([score])
+
+
 ''' 一些距离计算方法 '''
 
 # 最长公共子序列（LCS）, 获取是a, b的最长公共子序列

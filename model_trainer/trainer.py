@@ -63,8 +63,10 @@ def main():
         coauthor_2,
         stringDistance_1,
         stringDistance_2,
-        JournalInfo_1,
-        JournalInfo_2, # current of no use
+        # JournalInfo_1,
+        # JournalInfo_2,
+        ConferenceInfo_1,
+        ConferenceInfo_2,
     ]
 
     ''' 分类器 '''
@@ -102,6 +104,7 @@ def main():
         = json.load(open(config.PAPERIDAUTHORID_TO_NAME_AND_AFFILIATION_FILE), encoding="utf-8")
 
     dict_authorOnJournals = json.load(open(config.AUTHOR_ON_JOURNAL_FILE))
+    dict_authorOnConferences = json.load(open(config.AUTHOR_ON_CONFERENCE_FILE))
 
     # 使用pandas加载csv数据
     PaperAuthor = pandas.read_csv(config.PAPERAUTHOR_FILE)  # 加载 PaperAuthor.csv 数据
@@ -112,7 +115,8 @@ def main():
     feature_params = {"dict_coauthor": dict_coauthor,
                       "dict_paperIdAuthorId_to_name_aff": dict_paperIdAuthorId_to_name_aff, "PaperAuthor": PaperAuthor,
                       "Author": Author, "Paper": Paper,
-                      "dict_authorOnJournals": dict_authorOnJournals}
+                      "dict_authorOnJournals": dict_authorOnJournals,
+                      "dict_authorOnConferences": dict_authorOnConferences,}
 
     # 为训练和测试数据，抽取特征，分别生成特征文件
     trainer.make_feature_file(train_AuthorIdPaperIds,  #训练的 Author, Paper 数据
@@ -125,11 +129,15 @@ def main():
     # 对模型的预测结果，重新进行整理，得到想要的格式的预测结果
     get_prediction(config.TEST_FEATURE_PATH, config.TEST_RESULT_PATH, config.TEST_PREDICT_PATH)
 
+    # make the Test.P02.csv
+    util.make_export()
+
     ''' 评估,（预测 vs 标准答案）'''
-    gold_file = config.GOLD_FILE
-    pred_file = config.TEST_PREDICT_PATH
-    cmd = "python evalution.py %s %s" % (gold_file, pred_file)
-    os.system(cmd)
+    if os.path.exists(config.GOLD_FILE) > 0:
+        gold_file = config.GOLD_FILE
+        pred_file = config.TEST_PREDICT_PATH
+        cmd = "python evalution.py %s %s" % (gold_file, pred_file)
+        os.system(cmd)
 
 
 if __name__ == "__main__":

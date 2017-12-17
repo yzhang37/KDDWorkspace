@@ -42,4 +42,3 @@ def load_test_data(test_path):
             authorIdPaperIds.append(authorIdPaperId)
 
     return authorIdPaperIds
-

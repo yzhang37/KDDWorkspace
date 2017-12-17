@@ -2,6 +2,8 @@
 import csv
 import os
 import sys
+import config
+import shutil
 from feature import Feature
 
 if sys.version_info.major == 2:
@@ -104,6 +106,10 @@ def write_example_list_to_arff_file(example_list, dimension, to_file):
             out_lines.append("%s,%s" % (feature, target))
 
         fout.write("\n".join(out_lines))
+
+
+def make_export():
+    shutil.copy(config.TEST_PREDICT_PATH, config.EXPORT_TEST_CSV_PATH)
 
 
 if __name__ == '__main__':
